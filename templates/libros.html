@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Libros{% endblock %}
+
+{% block content %}
+<h2>Libros</h2>
+<form method="POST">
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" name="titulo" required>
+    <label for="autor">Autor:</label>
+    <input type="text" id="autor" name="autor" required>
+    <label for="precio">Precio:</label>
+    <input type="text" id="precio" name="precio" required>
+    <label for="fecha_publicacion">Fecha de Publicación:</label>
+    <input type="date" id="fecha_publicacion" name="fecha_publicacion" required>
+    <button type="submit">Agregar Libro</button>
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Precio</th>
+            <th>Fecha de Publicación</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for libro in libros %}
+        <tr>
+            <td>{{ libro[0] }}</td>
+            <td>{{ libro[1] }}</td>
+            <td>{{ libro[2] }}</td>
+            <td>{{ libro[3] }}</td>
+            <td>{{ libro[4] }}</td>
+            <td>
+                <a href="{{ url_for('editar_libro', id=libro[0]) }}">Editar</a>
+                <form action="{{ url_for('eliminar_libro', id=libro[0]) }}" method="POST" style="display:inline;">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Tienda de Libros</title>
+</head>
+<body>
+    <h1>Bienvenido a la Tienda de Libros</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('users') }}">Usuarios</a></li>
+            <li><a href="{{ url_for('books') }}">Libros</a></li>
+            <li><a href="{{ url_for('loans') }}">Préstamos</a></li>
+        </ul>
+    </nav>
+</body>
+</html>

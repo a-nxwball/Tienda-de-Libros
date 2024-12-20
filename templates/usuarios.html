@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Usuarios{% endblock %}
+
+{% block content %}
+<h2>Usuarios</h2>
+<div style="display: flex;">
+    <form method="POST" style="flex: 1;">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <label for="telefono">Teléfono:</label>
+        <input type="text" id="telefono" name="telefono" required>
+        <button type="submit">Agregar Usuario</button>
+    </form>
+    <div id="chatbox" style="flex: 1; margin-left: 2rem;">
+        <h3>Chatbot</h3>
+        <div id="chatbox-messages"></div>
+        <input type="text" id="chatbox-input" placeholder="Escribe un mensaje...">
+        <button onclick="sendMessage()">Enviar</button>
+    </div>
+</div>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Teléfono</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for usuario in usuarios %}
+        <tr>
+            <td>{{ usuario[0] }}</td>
+            <td>{{ usuario[1] }}</td>
+            <td>{{ usuario[2] }}</td>
+            <td>{{ usuario[3] }}</td>
+            <td>
+                <a href="{{ url_for('editar_usuario', id=usuario[0]) }}">Editar</a>
+                <form action="{{ url_for('eliminar_usuario', id=usuario[0]) }}" method="POST" style="display:inline;">
+                    <button type="submit">Eliminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+function sendMessage() {
+    const input = document.getElementById('chatbox-input');
+    const message = input.value;
+    input.value = '';
+
+    const messagesDiv = document.getElementById('chatbox-messages');
+    const userMessageDiv = document.createElement('div');
+    userMessageDiv.textContent = 'Tú: ' + message;
+    messagesDiv.appendChild(userMessageDiv);
+
+    fetch('/chatbot', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: 'message=' + encodeURIComponent(message),
+    })
+    .then(response => response.text())
+    .then(botMessage => {
+        const botMessageDiv = document.createElement('div');
+        botMessageDiv.textContent = 'Bot: ' + botMessage;
+        messagesDiv.appendChild(botMessageDiv);
+    });
+}
+</script>
+{% endblock %}
